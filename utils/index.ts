@@ -5,9 +5,9 @@ async function resolveReferences(references: string[]) {
   const reqRefs = references.map((reference) => {
     return new Promise((resolve, reject) => {
       fetch(reference)
-        .then(async (res) => {
+        .then((res) => {
           if (!res.ok) {
-            throw Error('Unresolved');
+            throw new Error('Unresolved');
           }
           return res.json();
         })

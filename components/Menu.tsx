@@ -27,7 +27,7 @@ function Menu({ hast, refs }: { hast: Element; refs: Reference | undefined }) {
   }
 
   const isByType = keys.includes('type');
-  let rowsByType: { [key: string]: Array<{ [key: string]: string }> } = {};
+  const rowsByType: { [key: string]: Array<{ [key: string]: string }> } = {};
   if (isByType) {
     rows.forEach((row) => {
       if (!rowsByType[row.type]) {
