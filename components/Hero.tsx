@@ -18,7 +18,14 @@ function Hero({ hast }: { hast: Element }) {
               // Since images are contained in P, don't use DIV else you end up with P > DIV > IMG
               // which will throw a hydration miss match see https://nextjs.org/docs/messages/react-hydration-error
               <span key={index} className="block relative overflow-hidden h-[600px]">
-                <Image src={properties.src} fill={true} priority={true} alt={properties.alt} className="object-cover" />
+                <Image
+                  src={properties.src}
+                  fill={true}
+                  priority={true}
+                  alt={properties.alt}
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
               </span>
             );
           }
