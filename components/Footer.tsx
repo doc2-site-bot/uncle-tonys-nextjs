@@ -33,7 +33,7 @@ export default function Footer({ hast }: { hast: Root | undefined }) {
       {toH((name, props, children) => {
         index++;
 
-        if (name === 'variable') {
+        if (name === 'var') {
           const key = children?.[0];
           const variable = variables[key as keyof typeof variables];
 
