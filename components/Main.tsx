@@ -16,7 +16,7 @@ type RenderParams = {
 const componentMap = {
   contact: Contact,
   hero: Hero,
-  menu: Menu
+  'web-menu': Menu
 };
 
 /**
@@ -28,7 +28,7 @@ function render({ hast, refs, components, key = 'key-' }: RenderParams): Array<R
   }
 
   const elements = hast.children.filter(
-    (child) => child.type === 'element' && child.tagName !== 'header' && child.tagName !== 'footer'
+    (child) => child.type === 'element' && child.tagName !== 'web-header' && child.tagName !== 'web-footer'
   ) as unknown as Array<Element>;
 
   return elements.map((child, index) => {

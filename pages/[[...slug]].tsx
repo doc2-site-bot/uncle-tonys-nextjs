@@ -25,7 +25,7 @@ function Page({ meta, hast, refs, components }: PageProps) {
   // Query header and footer
   let header, footer;
   if (refs) {
-    const [headerDocument, footerDocument] = ['header', 'footer'].map((name) => {
+    const [headerDocument, footerDocument] = ['web-header', 'web-footer'].map((name) => {
       const element = select(name, hast);
 
       if (element?.properties?.reference) {
