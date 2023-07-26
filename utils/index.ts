@@ -1,20 +1,23 @@
 /**
  * Resolve all document or spreadsheet references in parallel
  */
-async function resolveReferences(references: Array<{ url: string; type: string }>, workspace: string) {
+async function resolveReferences(
+  references: Array<{ url: string; type: string }>,
+  workspace: string
+) {
   const reqRefs = references
-    .filter(({ type }) => type === 'document' || type === 'spreadsheet')
+    .filter(({ type }) => type === "document" || type === "spreadsheet")
     .map((reference) => {
       return new Promise((resolve, reject) => {
         fetch(reference.url, getFetchOptions(workspace))
           .then((res) => {
             if (!res.ok) {
-              throw new Error('Unresolved');
+              throw new Error("Unresolved");
             }
             return res.json();
           })
           .then((res) => {
-            if (res.type === 'document') {
+            if (res.type === "document") {
               const { hast, components, references } = res;
 
               return resolve([
@@ -22,18 +25,18 @@ async function resolveReferences(references: Array<{ url: string; type: string }
                 {
                   hast,
                   components,
-                  references
-                }
+                  references,
+                },
               ]);
-            } else if (res.type === 'spreadsheet') {
+            } else if (res.type === "spreadsheet") {
               const { rows, keys } = res;
 
               return resolve([
                 reference.url,
                 {
                   rows,
-                  keys
-                }
+                  keys,
+                },
               ]);
             }
 
@@ -45,7 +48,9 @@ async function resolveReferences(references: Array<{ url: string; type: string }
       });
     });
 
-  const resolvedRefs = (await Promise.all(reqRefs)) as Array<[string, Document | Spreadsheet]>;
+  const resolvedRefs = (await Promise.all(reqRefs)) as Array<
+    [string, Document | Spreadsheet]
+  >;
 
   return Object.fromEntries(resolvedRefs) as ResolvedReference;
 }
@@ -55,10 +60,10 @@ async function resolveReferences(references: Array<{ url: string; type: string }
  * */
 function getWorkspace() {
   if (process.env.D2S_EMAIL && process.env.D2S_SECRET) {
-    return 'dev';
+    return "dev";
   }
 
-  return process.env.NODE_ENV === 'production' ? 'live' : 'preview';
+  return process.env.NODE_ENV === "production" ? "live" : "preview";
 }
 
 /**
@@ -69,13 +74,15 @@ function getWorkspace() {
 function getFetchOptions(workspace: string) {
   let options;
 
-  if (workspace === 'dev') {
-    const authorization = `basic ${btoa(`${process.env.D2S_EMAIL}:${process.env.D2S_SECRET}`)}`;
+  if (workspace === "dev") {
+    const authorization = `basic ${btoa(
+      `${process.env.D2S_EMAIL}:${process.env.D2S_SECRET}`
+    )}`;
 
     options = {
       headers: {
-        authorization
-      }
+        authorization,
+      },
     };
   }
 

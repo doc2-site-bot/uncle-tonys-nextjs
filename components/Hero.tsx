@@ -1,8 +1,8 @@
-import { toH } from 'hast-to-hyperscript';
-import { createElement } from 'react';
-import Image from 'next/image';
-import { Element } from 'hast';
-import { h } from 'hastscript';
+import { toH } from "hast-to-hyperscript";
+import { createElement } from "react";
+import Image from "next/image";
+import { Element } from "hast";
+import { h } from "hastscript";
 
 function Hero({ hast }: { hast: Element }) {
   let index = 0;
@@ -13,11 +13,14 @@ function Hero({ hast }: { hast: Element }) {
         {toH((name, properties, children) => {
           index++;
 
-          if (name === 'img') {
+          if (name === "img") {
             return (
               // Since images are contained in P, don't use DIV else you end up with P > DIV > IMG
               // which will throw a hydration miss match see https://nextjs.org/docs/messages/react-hydration-error
-              <span key={index} className="block relative overflow-hidden h-[600px]">
+              <span
+                key={index}
+                className="block relative overflow-hidden h-[600px]"
+              >
                 <Image
                   src={properties.src}
                   fill={true}
@@ -31,7 +34,7 @@ function Hero({ hast }: { hast: Element }) {
           }
 
           return createElement(name, properties, children);
-        }, h('div', ...hast.children))}
+        }, h("div", ...hast.children))}
       </div>
     </div>
   );

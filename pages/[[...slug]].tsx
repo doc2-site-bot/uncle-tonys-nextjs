@@ -1,13 +1,16 @@
-import Head from 'next/head';
-import { select } from 'hast-util-select';
+import Head from "next/head";
+import { select } from "hast-util-select";
 
-import { resolveReferences, getWorkspace, getFetchOptions } from '../utils';
-import Header from '../components/Header';
-import Main from '../components/Main';
-import Footer from '../components/Footer';
+import { resolveReferences, getWorkspace, getFetchOptions } from "../utils";
+import Header from "../components/Header";
+import Main from "../components/Main";
+import Footer from "../components/Footer";
 
-import { GetServerSidePropsResult, GetServerSidePropsContext } from 'next/types';
-import { Root } from 'hast';
+import {
+  GetServerSidePropsResult,
+  GetServerSidePropsContext,
+} from "next/types";
+import { Root } from "hast";
 
 type PageProps = {
   meta?: { [key: string]: string };
@@ -25,13 +28,15 @@ function Page({ meta, hast, refs, components }: PageProps) {
   // Query header and footer
   let header, footer;
   if (refs) {
-    const [headerDocument, footerDocument] = ['web-header', 'web-footer'].map((name) => {
-      const element = select(name, hast);
+    const [headerDocument, footerDocument] = ["web-header", "web-footer"].map(
+      (name) => {
+        const element = select(name, hast);
 
-      if (element?.properties?.reference) {
-        return refs[String(element.properties.reference)];
+        if (element?.properties?.reference) {
+          return refs[String(element.properties.reference)];
+        }
       }
-    });
+    );
 
     header = headerDocument;
     footer = footerDocument;
@@ -59,22 +64,22 @@ function Page({ meta, hast, refs, components }: PageProps) {
  * Retrieve document by path and resolve references
  */
 export async function getServerSideProps({
-  params
+  params,
 }: GetServerSidePropsContext): Promise<GetServerSidePropsResult<PageProps>> {
   // Resolve path
-  let path = '/';
+  let path = "/";
   const slug = params?.slug && Array.isArray(params.slug) ? params.slug : [];
   if (slug.length) {
-    path = `${path}${slug.join('/')}`;
-    if (path === '/index') {
-      path = '/';
+    path = `${path}${slug.join("/")}`;
+    if (path === "/index") {
+      path = "/";
     }
   }
 
   // Ignore fragments
-  if (path.startsWith('/fragments/')) {
+  if (path.startsWith("/fragments/")) {
     return {
-      notFound: true
+      notFound: true,
     };
   }
 
@@ -86,26 +91,28 @@ export async function getServerSideProps({
 
   if (!reqDoc.ok) {
     return {
-      notFound: true
+      notFound: true,
     };
   }
 
   const doc: Document = await reqDoc.json();
   const { meta, hast, components, references } = doc;
-  const refs = references ? await resolveReferences(references, workspace) : undefined;
+  const refs = references
+    ? await resolveReferences(references, workspace)
+    : undefined;
 
   return {
     props: {
       meta,
       hast,
       refs,
-      components
-    }
+      components,
+    },
   };
 }
 
 export const config = {
-  runtime: 'experimental-edge'
+  runtime: "experimental-edge",
 };
 
 export default Page;

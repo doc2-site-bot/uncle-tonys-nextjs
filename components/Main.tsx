@@ -1,9 +1,9 @@
-import Hero from './Hero';
-import Contact from './Contact';
-import Menu from './Menu';
-import { createElement, ReactNode } from 'react';
-import { toH } from 'hast-to-hyperscript';
-import { Root, Element } from 'hast';
+import Hero from "./Hero";
+import Contact from "./Contact";
+import Menu from "./Menu";
+import { createElement, ReactNode } from "react";
+import { toH } from "hast-to-hyperscript";
+import { Root, Element } from "hast";
 
 type RenderParams = {
   meta?: { [key: string]: string };
@@ -16,28 +16,40 @@ type RenderParams = {
 const componentMap = {
   contact: Contact,
   hero: Hero,
-  'web-menu': Menu
+  "web-menu": Menu,
 };
 
 /**
  * Recursively render hast with references and components
  */
-function render({ hast, refs, components, key = 'key-' }: RenderParams): Array<ReactNode> | null {
+function render({
+  hast,
+  refs,
+  components,
+  key = "key-",
+}: RenderParams): Array<ReactNode> | null {
   if (!hast) {
     return null;
   }
 
   const elements = hast.children.filter(
-    (child) => child.type === 'element' && child.tagName !== 'web-header' && child.tagName !== 'web-footer'
+    (child) =>
+      child.type === "element" &&
+      child.tagName !== "web-header" &&
+      child.tagName !== "web-footer"
   ) as unknown as Array<Element>;
 
   return elements.map((child, index) => {
-    if (child.tagName === 'fragment' && refs && child?.properties?.reference) {
-      return render({ ...refs[String(child.properties.reference)], key: `key-${key}` });
+    if (child.tagName === "fragment" && refs && child?.properties?.reference) {
+      return render({
+        ...refs[String(child.properties.reference)],
+        key: `key-${key}`,
+      });
     }
 
     if (components && components.includes(child.tagName)) {
-      const component = componentMap[child.tagName as keyof typeof componentMap];
+      const component =
+        componentMap[child.tagName as keyof typeof componentMap];
 
       if (!component) {
         console.warn(`Component "${child.tagName}" not found`);
@@ -50,7 +62,10 @@ function render({ hast, refs, components, key = 'key-' }: RenderParams): Array<R
     }
 
     return (
-      <div key={`${key}${index}`} className="prose lg:prose-xl mx-auto py-4 text-center">
+      <div
+        key={`${key}${index}`}
+        className="prose lg:prose-xl mx-auto py-4 text-center"
+      >
         {toH(createElement, child)}
       </div>
     );
@@ -58,7 +73,11 @@ function render({ hast, refs, components, key = 'key-' }: RenderParams): Array<R
 }
 
 function Main({ hast, refs, components }: RenderParams) {
-  return <main className="bg-red-800 py-8 px-8">{render({ hast, refs, components })}</main>;
+  return (
+    <main className="bg-red-800 py-8 px-8">
+      {render({ hast, refs, components })}
+    </main>
+  );
 }
 
 export default Main;

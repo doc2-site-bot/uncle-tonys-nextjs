@@ -1,25 +1,25 @@
-import { toH } from 'hast-to-hyperscript';
-import { createElement } from 'react';
-import { Root } from 'hast';
-import { h } from 'hastscript';
+import { toH } from "hast-to-hyperscript";
+import { createElement } from "react";
+import { Root } from "hast";
+import { h } from "hastscript";
 
 const variables = {
   year: {
     value: new Date().getFullYear(),
-    href: ''
+    href: "",
   },
   framework: {
-    value: 'Next.js',
-    href: 'https://nextjs.org/'
+    value: "Next.js",
+    href: "https://nextjs.org/",
   },
   host: {
-    value: 'Vercel',
-    href: 'http://vercel.com/'
+    value: "Vercel",
+    href: "http://vercel.com/",
   },
   repo: {
-    value: 'GitHub repository',
-    href: 'https://github.com/doc2-site-bot/uncle-tonys-nextjs'
-  }
+    value: "GitHub repository",
+    href: "https://github.com/doc2-site-bot/uncle-tonys-nextjs",
+  },
 };
 
 export default function Footer({ hast }: { hast: Root | undefined }) {
@@ -33,7 +33,7 @@ export default function Footer({ hast }: { hast: Root | undefined }) {
       {toH((name, props, children) => {
         index++;
 
-        if (name === 'var') {
+        if (name === "var") {
           const key = children?.[0];
           const variable = variables[key as keyof typeof variables];
 
@@ -43,14 +43,19 @@ export default function Footer({ hast }: { hast: Root | undefined }) {
 
           if (variable.href) {
             return (
-              <a key={index} href={variable.href} target="_blank" rel="noreferrer">
+              <a
+                key={index}
+                href={variable.href}
+                target="_blank"
+                rel="noreferrer"
+              >
                 {variable.value}
               </a>
             );
           }
 
           return <span key={index}>{variable.value}</span>;
-        } else if (name === 'a') {
+        } else if (name === "a") {
           return (
             <a key={index} href={props.href} target="_blank" rel="noreferrer">
               {children}
@@ -59,7 +64,7 @@ export default function Footer({ hast }: { hast: Root | undefined }) {
         }
 
         return createElement(name, props, children);
-      }, h('div', ...hast.children))}
+      }, h("div", ...hast.children))}
     </footer>
   );
 }
