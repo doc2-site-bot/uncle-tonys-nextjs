@@ -98,7 +98,7 @@ function Menu({
                       {prices.map((price, index2) => (
                         <MenuItem
                           key={index2}
-                          name={price.replace("price", "")}
+                          name={price.replace("price", "").replaceAll("-", " ")}
                           price={row[price]}
                         />
                       ))}
