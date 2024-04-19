@@ -56,25 +56,25 @@ async function resolveReferences(
 }
 
 /**
- * Resolve workspace either "dev", "preview" or "live"
+ * Resolve workspace either "private", "preview" or "live"
  * */
 function getWorkspace() {
   if (process.env.D2S_EMAIL && process.env.D2S_SECRET) {
-    return "dev";
+    return "private";
   }
 
   return process.env.NODE_ENV === "production" ? "live" : "preview";
 }
 
 /**
- * Returns fetch options with auth header if workspace is "dev"
+ * Returns fetch options with auth header if workspace is "private"
  *
  * @param workspace
  */
 function getFetchOptions(workspace: string) {
   let options;
 
-  if (workspace === "dev") {
+  if (workspace === "private") {
     const authorization = `basic ${btoa(
       `${process.env.D2S_EMAIL}:${process.env.D2S_SECRET}`
     )}`;
